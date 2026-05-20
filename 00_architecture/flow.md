@@ -9,15 +9,33 @@
 ```
                         ┌──────────────────────┐
                         │     USER INPUT       │
-                        │  Tujuan + Konteks    │
+                        │  (bebas, 1 kolom)    │
                         └──────────┬───────────┘
                                    │
                     ┌──────────────▼───────────────┐
+                    │   ★ STAGE 0: DISCOVERY        │
+                    │  (Opal Agent Step / Gemini)   │◄── Memory (preferensi lama)
+                    │  • Load @agent_persona        │
+                    │  • Cek kelengkapan input      │
+                    │  ┌───────────────────────┐    │
+                    │  │ 🟢 FAST TRACK          │    │
+                    │  │    3-4 elemen lengkap  │    │
+                    │  │    → langsung handoff  │    │
+                    │  ├───────────────────────┤    │
+                    │  │ 🟡 LIGHT DISCOVERY     │    │
+                    │  │    2 elemen — 1 tanya  │    │
+                    │  ├───────────────────────┤    │
+                    │  │ 🔴 FULL DISCOVERY      │    │
+                    │  │    ≤1 elemen — max 3x  │    │
+                    │  └───────────────────────┘    │
+                    └──────────────┬───────────────┘
+                                   │ DISCOVERY_COMPLETE: true
+                    ┌──────────────▼───────────────┐
                     │     AGENT CLASSIFIER          │
-                    │  (Opal Agent Step / Gemini)   │◄─────── Memory
-                    │  • Baca + analisis input      │     (Google Sheets)
-                    │  • Deteksi kategori           │
-                    │  • Tanya balik jika ambigu    │
+                    │  (Opal Agent Step / Gemini)   │
+                    │  • Baca data dari Discovery   │
+                    │  • Konfirmasi kategori        │
+                    │  • Output routing signal      │
                     └──────────────┬───────────────┘
                                    │
                     ┌──────────────▼───────────────┐
@@ -85,23 +103,64 @@
 
 ## Detail Setiap Step
 
+### STEP 0 — Discovery Stage *(Layer Baru — Stage Pertama)*
+
+**Platform:** Opal Agent Step (Interactive Chat aktif)  
+**Model:** Gemini 3 Flash  
+**Asset:** `@agent_persona` wajib diload  
+**Tujuan:** Menggali informasi universal sebelum routing dilakukan
+
+**Tiga Mode Operasi:**
+
+| Mode | Trigger | Aksi |
+|------|---------|------|
+| 🟢 Fast Track | 3-4 elemen lengkap | Pujian + langsung handoff |
+| 🟡 Light Discovery | 2 elemen | 1 pertanyaan + lanjut |
+| 🔴 Full Discovery | 0-1 elemen | Max 3 pertanyaan + best-guess |
+
+**4 Elemen yang dicek:**
+1. **Subjek** — Ada topik/objek spesifik?
+2. **Kategori** — Jenis output bisa ditentukan?
+3. **Tujuan/Platform** — Konteks penggunaan ada?
+4. **Ekspektasi Output** — Ada gambaran style/mood?
+
+**Output handoff ke Classifier:**
+```
+DISCOVERY_COMPLETE: true
+SUBJEK: [deskripsi]
+KATEGORI_DUGAAN: [gambar/video/audio/coding/persona/konten]
+PLATFORM_TARGET: [platform]
+MODEL_PREFERENSI: [model atau "rekomendasi agent"]
+EKSPEKTASI: [style/mood/requirement]
+MODE_YANG_DIPAKAI: [fast_track/light_discovery/full_discovery]
+```
+
+> Lihat system prompt lengkap di [`01_core/discovery_stage.md`](../01_core/discovery_stage.md)
+> Lihat character sheet persona di [`01_core/agent_persona.md`](../01_core/agent_persona.md)
+
+---
+
 ### STEP 1 — User Input
 
 **Platform:** Opal Input Step  
-**Tujuan:** Mengumpulkan tujuan dan konteks dari user
+**Tujuan:** Satu kolom input bebas — user mengetik tujuannya dalam bahasa natural
 
-**Field yang tersedia:**
+**Desain field:**
 | Field | Tipe | Keterangan |
 |-------|------|-----------|
-| `tujuan` | Text (wajib) | Apa yang ingin dibuat/capai |
-| `konteks` | Text (opsional) | Referensi, contoh, atau detail tambahan |
-| `target_model` | Text (opsional) | Jika user sudah tahu mau pakai model apa |
+| `pesan` | Text Area (wajib) | Satu kolom bebas, tidak ada form kompleks |
+
+**Placeholder teks yang tampil ke user:**
+```
+"Ceritain aja — mau bikin apa hari ini? Nggak perlu formal."
+```
 
 **Contoh input valid:**
 ```
 "aku mau bikin gambar fantasy dark art buat thumbnail"
 "buat prompt coding untuk sistem login dengan PHP Laravel"
 "buatin musik upbeat untuk konten YouTube review gadget"
+"konten promosi" ← (Discovery Stage akan menggali lebih lanjut)
 ```
 
 ---

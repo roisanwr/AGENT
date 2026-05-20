@@ -43,7 +43,7 @@
 |-------|------|--------|----------------|
 | Claude 3.7 Sonnet | [`text/claude.md`](text/claude.md) | ✅ Aktif | Mei 2026 |
 | GPT-4o / GPT-5 | [`text/gpt.md`](text/gpt.md) | ✅ Aktif | Mei 2026 |
-| Gemini 2.0/2.5 | [`text/gemini.md`](text/gemini.md) | ✅ Aktif | Mei 2026 |
+| Gemini 3 (Flash/Pro) | [`text/gemini.md`](text/gemini.md) | ✅ Aktif | Mei 2026 |
 
 ---
 

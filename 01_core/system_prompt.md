@@ -9,7 +9,7 @@
 ## Konteks Penggunaan
 
 - **Digunakan di:** Opal Agent Step (Step 2 dalam workflow)
-- **Model:** Gemini Flash
+- **Model:** Gemini 3 Flash (atau Gemini 3.1 Pro untuk reasoning tingkat tinggi)
 - **Input:** Output dari Opal Input Step (tujuan + konteks user)
 - **Output:** Routing decision + parameter awal
 

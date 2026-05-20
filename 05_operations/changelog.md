@@ -47,9 +47,25 @@ Pembuatan struktur dasar sistem AGENT dengan:
 
 **Impact:** N/A — initial release
 
-**Oleh:** [nama/inisial]
+**Oleh:** Antigravity
 
 ---
+
+### [2026-05-20] — UBAH: Penyelarasan Model Internal Opal ke Gemini 3
+**File yang Berubah:** 
+- `c:\AGENT\opalflow.md`
+- `c:\AGENT\03_models\_index.md`
+- `c:\AGENT\01_core\system_prompt.md`
+
+**Deskripsi:**
+Menyelaraskan nama model internal Opal yang didokumentasikan dengan kondisi aktual platform terbaru (Gemini 3 Flash & Gemini 3.1 Pro). Menegaskan batas cakupan project AGENT bahwa workflow prompt builder hanya berjalan menggunakan engine teks Gemini 3, sementara model visual/audio internal Opal lainnya (Nano Banana, Lyria 2, AudioLM, Veo) berada di luar eksekusi workflow pembentuk prompt ini.
+
+**Impact:**
+- Dokumentasi teknis alur Opal (`opalflow.md`) kini akurat sesuai runtime model di dashboard Opal.
+- Penentuan model di `system_prompt.md` dan index models selaras menggunakan Gemini 3.
+
+---
+
 
 ## Template untuk Entri Berikutnya
 
