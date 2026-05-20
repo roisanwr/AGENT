@@ -1,0 +1,201 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:1rem 0}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem}
+.tab{font-size:12px;font-weight:500;padding:5px 12px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+.tab.active{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary)}
+.panel{display:none}
+.panel.active{display:block}
+.branch-header{margin-bottom:1rem}
+.branch-name{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.branch-sub{font-size:12px;color:var(--color-text-secondary);margin-top:3px}
+.section{margin-bottom:1.25rem}
+.section-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:8px}
+.checklist{list-style:none}
+.checklist li{font-size:13px;color:var(--color-text-primary);padding:6px 10px;border-radius:var(--border-radius-md);margin-bottom:4px;display:flex;gap:10px;align-items:flex-start;background:var(--color-background-secondary)}
+.checklist li .icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.checklist li .txt{}
+.checklist li .txt small{display:block;font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.trap{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:6px}
+.trap-label{font-size:11px;font-weight:500;color:var(--color-text-danger);margin-bottom:4px}
+.trap-text{font-size:12px;color:var(--color-text-secondary)}
+.example-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 14px;font-size:12px;color:var(--color-text-secondary);font-family:var(--font-mono);line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.col2{grid-template-columns:1fr}}
+</style>
+<div class="wrap">
+<div class="tabs">
+  <button class="tab active" onclick="show('gambar',this)">Gambar</button>
+  <button class="tab" onclick="show('video',this)">Video</button>
+  <button class="tab" onclick="show('audio',this)">Audio</button>
+  <button class="tab" onclick="show('coding',this)">Coding</button>
+  <button class="tab" onclick="show('persona',this)">Persona</button>
+  <button class="tab" onclick="show('konten',this)">Konten</button>
+</div>
+
+<div id="gambar" class="panel active">
+  <div class="branch-header">
+    <div class="branch-name">Cabang gambar / image</div>
+    <div class="branch-sub">Target model: Midjourney, DALL-E, Stable Diffusion, Ideogram, Flux</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Checklist kualitas wajib</div>
+    <ul class="checklist">
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Subjek utama harus disebut paling awal dan paling spesifik — bukan "wanita cantik" tapi "seorang wanita berusia 30an, rambut keriting pendek, ekspresi serius"<small>Model image membaca token awal lebih kuat bobotnya</small></span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Sertakan medium / style secara eksplisit — "oil painting", "cinematic photography", "flat vector illustration"<small>Tanpa ini model pilih default yang random</small></span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Sebutkan lighting — "golden hour", "dramatic side lighting", "soft diffused"<small>Lighting adalah 50% dari mood gambar</small></span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Tambahkan kualitas teknis di akhir — "4K, highly detailed, sharp focus, award-winning"<small>Booster kualitas yang aman di hampir semua model</small></span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Sertakan negative prompt untuk MJ/SD — hal yang TIDAK diinginkan harus dieksplisitkan<small>Misal: "no blur, no watermark, no extra limbs"</small></span></li>
+    </ul>
+  </div>
+  <div class="section">
+    <div class="section-title">Jebakan umum</div>
+    <div class="trap"><div class="trap-label">Terlalu banyak subjek</div><div class="trap-text">Lebih dari 2–3 elemen utama → model kebingungan, satu elemen jadi diabaikan. Fokuskan ke satu hero element.</div></div>
+    <div class="trap"><div class="trap-label">Gaya yang kontradiksi</div><div class="trap-text">"Realistic anime photography" → model bingung mau pilih yang mana. Pilih satu genre visual utama.</div></div>
+    <div class="trap"><div class="trap-label">Ukuran tidak disebutkan</div><div class="trap-text">Aspek rasio sangat mempengaruhi komposisi. Portrait vs landscape vs square — harus ditentukan.</div></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Contoh struktur prompt</div>
+    <div class="example-box">[subjek detail] + [setting/latar] + [style/medium] + [lighting] + [mood/atmosphere] + [kualitas teknis] --ar [rasio] --neg [hal yang dihindari]</div>
+  </div>
+</div>
+
+<div id="video" class="panel">
+  <div class="branch-header">
+    <div class="branch-name">Cabang video</div>
+    <div class="branch-sub">Target model: Veo, Sora, Kling, Runway, Pika</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Checklist kualitas wajib</div>
+    <ul class="checklist">
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Deskripsikan camera movement secara eksplisit — "slow dolly in", "aerial drone shot pulling back", "static wide shot"<small>Ini yang paling sering dilupakan dan paling berpengaruh</small></span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Tentukan durasi dan pace — "5 second clip, slow motion", "30 second montage, quick cuts"<small>Tanpa ini model default ke durasi random</small></span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Deskripsikan aksi secara sekuensial — apa yang terjadi dari awal sampai akhir clip<small>Model video butuh narasi temporal yang jelas</small></span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Sebutkan tone visual — "cinematic, warm tones", "dark noir, high contrast", "bright and cheerful"</span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Tentukan apakah ada suara/musik dalam brief — beberapa model bisa generate audio juga</span></li>
+    </ul>
+  </div>
+  <div class="section">
+    <div class="section-title">Jebakan umum</div>
+    <div class="trap"><div class="trap-label">Prompt statis seperti gambar</div><div class="trap-text">Prompt video harus mendeskripsikan GERAK dan WAKTU, bukan hanya visual diam. "Seorang pria berdiri di pantai" → flat. "Seorang pria berjalan perlahan menuju ombak, angin menggerakkan rambutnya" → jauh lebih baik.</div></div>
+    <div class="trap"><div class="trap-label">Terlalu banyak scene dalam satu prompt</div><div class="trap-text">Satu prompt = satu continuous shot. Kalau mau multi-scene, buat prompt terpisah per scene.</div></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Contoh struktur prompt</div>
+    <div class="example-box">[camera movement + shot type] + [subjek + aksi sekuensial] + [setting] + [tone visual] + [durasi] + [kualitas]</div>
+  </div>
+</div>
+
+<div id="audio" class="panel">
+  <div class="branch-header">
+    <div class="branch-name">Cabang audio / musik</div>
+    <div class="branch-sub">Target model: Suno, Udio, MusicGen, ElevenLabs</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Checklist kualitas wajib</div>
+    <ul class="checklist">
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Genre + sub-genre — bukan hanya "jazz" tapi "smooth jazz, bossa nova influence"<small>Semakin spesifik semakin predictable hasilnya</small></span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Instrumen yang harus ada vs boleh tidak ada — "piano + bass, no drum kit"</span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">BPM atau kata keterangan tempo — "120 BPM", atau "upbeat", "languid", "driving"</span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Mood dan konteks penggunaan — "background cafe ambiance", "epic battle theme", "melancholic solo"<small>Konteks penggunaan sangat membantu model</small></span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Durasi target dan apakah perlu vokal atau instrumental</span></li>
+    </ul>
+  </div>
+  <div class="section">
+    <div class="section-title">Jebakan umum</div>
+    <div class="trap"><div class="trap-label">Referensi artis tanpa deskripsi</div><div class="trap-text">"Seperti Billie Eilish" → ambigu karena Billie punya banyak era/style. Deskripsikan elemen musikalnya: "whisper vocals, lo-fi bedroom pop, sparse arrangement, melancholic".</div></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Contoh struktur prompt</div>
+    <div class="example-box">[genre + sub-genre] + [instrumen utama] + [tempo/BPM] + [mood] + [konteks] + [durasi] + [vokal/instrumental]</div>
+  </div>
+</div>
+
+<div id="coding" class="panel">
+  <div class="branch-header">
+    <div class="branch-name">Cabang coding</div>
+    <div class="branch-sub">Target model: Claude, GPT-4o, Gemini, GitHub Copilot</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Checklist kualitas wajib</div>
+    <ul class="checklist">
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Sebutkan bahasa + versi + framework secara eksplisit — "Python 3.11, FastAPI"<small>Tanpa ini model mungkin pakai syntax versi lama</small></span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Deskripsikan input dan output yang diharapkan dengan contoh konkret<small>Ini yang paling mempercepat ketepatan output</small></span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Tentukan constraint — "harus bisa jalan tanpa library eksternal", "max 50 baris", "harus handle error"</span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Sebutkan gaya kode yang diharapkan — "dengan komentar penjelasan", "clean dan minimal", "production-ready"</span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Kalau ada kode existing, instruksikan untuk dimodifikasi bukan ditulis ulang dari nol</span></li>
+    </ul>
+  </div>
+  <div class="section">
+    <div class="section-title">Jebakan umum</div>
+    <div class="trap"><div class="trap-label">Tujuan terlalu abstrak</div><div class="trap-text">"Buatkan sistem login yang aman" → terlalu luas. Harus spesifik: auth method apa, session management bagaimana, framework apa, database apa.</div></div>
+    <div class="trap"><div class="trap-label">Tidak menyebut konteks codebase</div><div class="trap-text">Kalau ini bagian dari proyek yang lebih besar, harus dijelaskan struktur dan konvensi yang sudah ada.</div></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Contoh struktur prompt</div>
+    <div class="example-box">[bahasa+versi+framework] + [tujuan fungsi 1 kalimat] + [input/output dengan contoh] + [constraint] + [gaya kode] + [konteks proyek jika ada]</div>
+  </div>
+</div>
+
+<div id="persona" class="panel">
+  <div class="branch-header">
+    <div class="branch-name">Cabang persona / karakter AI</div>
+    <div class="branch-sub">Target model: Claude, GPT-4o, Gemini — untuk sistem chatbot/asisten</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Checklist kualitas wajib</div>
+    <ul class="checklist">
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Identitas harus konkret — nama, latar belakang singkat, "mengapa dia ada"<small>Memberi anchor pada model agar karakter konsisten</small></span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Tentukan cara bicara dengan contoh — "berbicara santai, sering pakai analogi, hindari jargon teknis"</span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Definisikan batasan eksplisit — apa yang persona TIDAK akan lakukan atau katakan<small>Ini sama pentingnya dengan yang boleh dilakukan</small></span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Sertakan contoh respons ideal — 1-2 contoh Q&A untuk "kalibrasi" karakter</span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Tentukan konteks penggunaan — chatbot customer service, tutor, teman cerita, asisten produktivitas</span></li>
+    </ul>
+  </div>
+  <div class="section">
+    <div class="section-title">Jebakan umum</div>
+    <div class="trap"><div class="trap-label">Kepribadian yang kontradiksi</div><div class="trap-text">"Serius tapi humoris, formal tapi santai" tanpa penjelasan kapan — model akan random pilih salah satu. Harus ada aturan kapan switch tone.</div></div>
+    <div class="trap"><div class="trap-label">Tidak ada contoh respons</div><div class="trap-text">Deskripsi persona tanpa contoh output nyata membuat model menginterpretasi sendiri — hasilnya bisa jauh dari ekspektasi.</div></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Contoh struktur prompt</div>
+    <div class="example-box">[identitas + latar] + [cara bicara + tone] + [keahlian + fokus topik] + [batasan] + [contoh Q&A] + [konteks penggunaan]</div>
+  </div>
+</div>
+
+<div id="konten" class="panel">
+  <div class="branch-header">
+    <div class="branch-name">Cabang konten / tulisan</div>
+    <div class="branch-sub">Blog, caption, script video, email, copywriting, dll</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Checklist kualitas wajib</div>
+    <ul class="checklist">
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Format dan panjang harus eksplisit — "artikel 800 kata", "caption 3 paragraf pendek", "script 60 detik"<small>Tanpa ini model pilih panjang sendiri yang sering tidak pas</small></span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Definisikan audiens secara spesifik — "pemula di bidang investasi usia 25-35", bukan hanya "orang umum"</span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Tentukan tujuan konten — edukasi, entertaintment, konversi, awareness, engagement<small>Tujuan menentukan struktur dan CTA</small></span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Sebutkan platform — Instagram, LinkedIn, YouTube, blog — karena gaya per platform berbeda</span></li>
+      <li><span class="icon"><i class="ti ti-check"></i></span><span class="txt">Berikan angle atau hook yang sudah dipikirkan, atau minta model generate pilihan angle dulu<small>Angle adalah pembeda antara konten biasa dan menarik</small></span></li>
+    </ul>
+  </div>
+  <div class="section">
+    <div class="section-title">Jebakan umum</div>
+    <div class="trap"><div class="trap-label">Tone yang tidak terdefinisi</div><div class="trap-text">"Tone profesional" masih terlalu luas. Spesifikkan: "seperti konsultan yang bicara ke teman lama — hangat tapi berbobot, tidak kaku, tidak pakai jargon corporate".</div></div>
+    <div class="trap"><div class="trap-label">Tidak menyebut hal yang dihindari</div><div class="trap-text">Kalau ada kata-kata, topik, atau pendekatan yang tidak boleh muncul — harus ditulis eksplisit. Model tidak bisa menebak pantangan tanpa instruksi.</div></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Contoh struktur prompt</div>
+    <div class="example-box">[format + panjang] + [platform] + [audiens spesifik] + [tujuan konten] + [tone + gaya bahasa] + [angle/hook] + [hal yang dihindari]</div>
+  </div>
+</div>
+
+</div>
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>

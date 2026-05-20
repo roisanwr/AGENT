@@ -1,0 +1,210 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:1rem 0}
+.section{margin-bottom:2rem}
+.section-label{font-size:11px;font-weight:500;letter-spacing:.06em;color:var(--color-text-tertiary);margin-bottom:.75rem}
+.change-banner{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:2rem;display:flex;gap:12px;align-items:flex-start}
+.change-banner i{font-size:18px;color:var(--color-text-warning);flex-shrink:0;margin-top:1px}
+.change-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.change-desc{font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.arch-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.arch-box{border-radius:var(--border-radius-md);padding:8px 14px;font-size:12px;font-weight:500;white-space:nowrap}
+.arch-box.gray{background:var(--color-background-secondary);color:var(--color-text-primary);border:0.5px solid var(--color-border-secondary)}
+.arch-box.purple{background:#EEEDFE;color:#3C3489;border:0.5px solid #AFA9EC}
+.arch-box.blue{background:#E6F1FB;color:#0C447C;border:0.5px solid #85B7EB}
+.arch-box.teal{background:#E1F5EE;color:#085041;border:0.5px solid #5DCAA5}
+.arch-box.amber{background:#FAEEDA;color:#633806;border:0.5px solid #EF9F27}
+.arch-box.new{border:1.5px solid #1D9E75;background:#E1F5EE;color:#085041;position:relative}
+.new-badge{position:absolute;top:-8px;right:6px;font-size:9px;font-weight:500;background:#1D9E75;color:#fff;padding:1px 6px;border-radius:10px;letter-spacing:.04em}
+.arch-arrow{color:var(--color-text-tertiary);font-size:14px;flex-shrink:0}
+.divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:1.5rem 0}
+.model-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.model-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;cursor:pointer;transition:border-color .15s}
+.model-card:hover{border-color:var(--color-border-primary)}
+.model-cat{font-size:10px;font-weight:500;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:5px}
+.model-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px}
+.model-tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.steps-list{display:flex;flex-direction:column;gap:8px}
+.step-row{display:flex;gap:12px;align-items:flex-start}
+.step-num{width:22px;height:22px;border-radius:50%;background:var(--color-background-secondary);font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--color-text-secondary);margin-top:1px}
+.step-content{}
+.step-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.step-desc{font-size:12px;color:var(--color-text-secondary);margin-top:2px;line-height:1.5}
+.highlight{color:var(--color-text-success);font-weight:500}
+.note{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 14px;font-size:12px;color:var(--color-text-secondary);display:flex;gap:8px;align-items:flex-start;margin-top:10px}
+.note i{font-size:15px;flex-shrink:0;margin-top:1px}
+.knowledge-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:480px){.knowledge-grid{grid-template-columns:1fr}}
+.know-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px 14px}
+.know-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px;display:flex;gap:6px;align-items:center}
+.know-list{list-style:none}
+.know-list li{font-size:11px;color:var(--color-text-secondary);padding:2px 0;display:flex;gap:6px}
+.know-list li::before{content:"·";color:var(--color-text-tertiary)}
+</style>
+<div class="wrap">
+
+<div class="change-banner">
+  <i class="ti ti-bulb" aria-hidden="true"></i>
+  <div>
+    <div class="change-title">Perubahan arsitektur utama</div>
+    <div class="change-desc">Sebelumnya: cabang = kategori saja (gambar, video, coding…)<br>Sekarang: cabang = kategori <strong>+</strong> target model. Satu lapisan baru ditambahkan setelah routing kategori.</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Alur baru — 2 level routing</div>
+  <div class="arch-row">
+    <div class="arch-box gray">User input</div>
+    <span class="arch-arrow">→</span>
+    <div class="arch-box purple">Agent classifier</div>
+    <span class="arch-arrow">→</span>
+    <div class="arch-box blue">Router kategori</div>
+    <span class="arch-arrow">→</span>
+    <div class="arch-box teal new"><span class="new-badge">BARU</span>Pilih model AI</div>
+    <span class="arch-arrow">→</span>
+    <div class="arch-box amber">Sub-agent spesifik</div>
+  </div>
+  <div class="note" style="margin-top:12px">
+    <i class="ti ti-info-circle" aria-hidden="true"></i>
+    <span>Model selector bisa otomatis (agent tebak dari konteks) atau user pilih manual. Idealnya: agent rekomendasikan, user konfirmasi.</span>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-label">Model yang perlu punya knowledge spesifik</div>
+  <div class="model-grid">
+    <div class="model-card" onclick="sendPrompt('Apa saja sintaks dan parameter unik Midjourney v6 yang perlu dimasukkan ke knowledge base prompt builder di Opal?')">
+      <div class="model-cat">Gambar</div>
+      <div class="model-name">Midjourney v6</div>
+      <div class="model-tags"><span class="tag">--ar</span><span class="tag">--style</span><span class="tag">--chaos</span><span class="tag">--no</span></div>
+    </div>
+    <div class="model-card" onclick="sendPrompt('Apa saja karakteristik DALL-E 3 yang perlu dimasukkan ke knowledge base prompt builder?')">
+      <div class="model-cat">Gambar</div>
+      <div class="model-name">DALL-E 3</div>
+      <div class="model-tags"><span class="tag">natural lang</span><span class="tag">detail deskriptif</span></div>
+    </div>
+    <div class="model-card" onclick="sendPrompt('Apa saja karakteristik Stable Diffusion yang perlu dimasukkan ke knowledge base prompt builder?')">
+      <div class="model-cat">Gambar</div>
+      <div class="model-name">Stable Diffusion</div>
+      <div class="model-tags"><span class="tag">LoRA</span><span class="tag">CFG scale</span><span class="tag">negative</span></div>
+    </div>
+    <div class="model-card" onclick="sendPrompt('Apa saja karakteristik Flux yang perlu dimasukkan ke knowledge base prompt builder?')">
+      <div class="model-cat">Gambar</div>
+      <div class="model-name">Flux</div>
+      <div class="model-tags"><span class="tag">natural lang</span><span class="tag">detail tinggi</span></div>
+    </div>
+    <div class="model-card" onclick="sendPrompt('Apa saja sintaks dan parameter unik Veo 2 / Veo 3 untuk video generation yang perlu dimasukkan ke knowledge base?')">
+      <div class="model-cat">Video</div>
+      <div class="model-name">Veo 2 / Veo 3</div>
+      <div class="model-tags"><span class="tag">camera ops</span><span class="tag">cinematic</span></div>
+    </div>
+    <div class="model-card" onclick="sendPrompt('Apa saja karakteristik Sora untuk video generation yang perlu dimasukkan ke knowledge base prompt builder?')">
+      <div class="model-cat">Video</div>
+      <div class="model-name">Sora</div>
+      <div class="model-tags"><span class="tag">scene desc</span><span class="tag">physics</span></div>
+    </div>
+    <div class="model-card" onclick="sendPrompt('Apa saja karakteristik Suno v4 untuk music generation yang perlu dimasukkan ke knowledge base prompt builder?')">
+      <div class="model-cat">Audio</div>
+      <div class="model-name">Suno v4</div>
+      <div class="model-tags"><span class="tag">metatag</span><span class="tag">lyric format</span></div>
+    </div>
+    <div class="model-card" onclick="sendPrompt('Apa perbedaan cara prompting Claude vs GPT-4o untuk coding dan persona yang perlu dimasukkan ke knowledge base?')">
+      <div class="model-cat">Teks/Coding</div>
+      <div class="model-name">Claude vs GPT-4o</div>
+      <div class="model-tags"><span class="tag">system prompt</span><span class="tag">XML tags</span></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-label">Cara implementasi knowledge per model di Opal</div>
+  <div class="steps-list">
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Buat "model knowledge sheet" di Google Sheets</div>
+        <div class="step-desc">Satu sheet per model — berisi: sintaks unik, parameter yang didukung, hal yang harus dihindari, contoh prompt terbaik, dan batas karakter/token. Agent bisa baca ini via memory step.</div>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">Model selector step — otomatis + konfirmasi</div>
+        <div class="step-desc">Setelah routing kategori, agent rekomendasikan model berdasarkan konteks user. Tampilkan pilihan: <span class="highlight">"Untuk style yang kamu minta, Midjourney v6 paling cocok — atau kamu mau pakai model lain?"</span></div>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Sub-agent generate — format sesuai model terpilih</div>
+        <div class="step-desc">System prompt generate step harus berisi instruksi spesifik per model: "Jika target Midjourney, gunakan sintaks --ar, --style, --no. Jika DALL-E 3, gunakan kalimat natural deskriptif tanpa parameter teknis."</div>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">Validasi format sebelum output</div>
+        <div class="step-desc">Tambahkan step validasi: cek apakah prompt yang digenerate sudah sesuai format model yang dipilih. Misalnya kalau target MJ, apakah sudah ada --ar? Kalau belum, agent isi otomatis dengan default yang masuk akal.</div>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <div class="step-title">Update knowledge secara berkala</div>
+        <div class="step-desc">Model AI update fitur dan sintaksnya rutin. Knowledge sheet perlu di-maintain — idealnya ada "versi" di setiap baris agar tahu kapan info terakhir diperbarui.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-label">Apa yang perlu masuk ke knowledge per model</div>
+  <div class="knowledge-grid">
+    <div class="know-card">
+      <div class="know-title"><i class="ti ti-code" style="font-size:14px" aria-hidden="true"></i> Sintaks & parameter</div>
+      <ul class="know-list">
+        <li>Parameter unik yang hanya ada di model ini</li>
+        <li>Format penulisan yang benar</li>
+        <li>Nilai default vs nilai optimal</li>
+        <li>Parameter yang deprecated</li>
+      </ul>
+    </div>
+    <div class="know-card">
+      <div class="know-title"><i class="ti ti-brain" style="font-size:14px" aria-hidden="true"></i> Karakteristik model</div>
+      <ul class="know-list">
+        <li>Kekuatan (apa yang dia unggul)</li>
+        <li>Kelemahan (apa yang sering gagal)</li>
+        <li>Batas token / karakter prompt</li>
+        <li>Sensitivitas terhadap urutan kata</li>
+      </ul>
+    </div>
+    <div class="know-card">
+      <div class="know-title"><i class="ti ti-thumb-up" style="font-size:14px" aria-hidden="true"></i> Best practices</div>
+      <ul class="know-list">
+        <li>Pola prompt yang terbukti bagus</li>
+        <li>Kata kunci booster kualitas</li>
+        <li>Urutan elemen yang optimal</li>
+        <li>Contoh prompt → output nyata</li>
+      </ul>
+    </div>
+    <div class="know-card">
+      <div class="know-title"><i class="ti ti-ban" style="font-size:14px" aria-hidden="true"></i> Yang harus dihindari</div>
+      <ul class="know-list">
+        <li>Kata / pola yang sering gagal</li>
+        <li>Konflik antar parameter</li>
+        <li>Hal yang trigger safety filter</li>
+        <li>Misconception umum user</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div>

@@ -1,0 +1,265 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.plan { padding: 1rem 0; }
+.phase { margin-bottom: 2rem; }
+.phase-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+.phase-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+.phase-title { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+.phase-desc { font-size: 13px; color: var(--color-text-secondary); margin-top: 2px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 14px 16px; cursor: pointer; transition: border-color .15s; }
+.card:hover { border-color: var(--color-border-primary); }
+.card-label { font-size: 11px; font-weight: 500; margin-bottom: 6px; }
+.card-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+.card-items { list-style: none; }
+.card-items li { font-size: 12px; color: var(--color-text-secondary); padding: 2px 0; display: flex; gap: 6px; }
+.card-items li::before { content: "·"; color: var(--color-text-tertiary); flex-shrink: 0; }
+.divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.5rem 0; }
+.badge-purple { background: #EEEDFE; color: #3C3489; }
+.badge-blue   { background: #E6F1FB; color: #0C447C; }
+.badge-teal   { background: #E1F5EE; color: #085041; }
+.badge-amber  { background: #FAEEDA; color: #633806; }
+.badge-green  { background: #EAF3DE; color: #27500A; }
+.accent-purple { border-left: 3px solid #7F77DD; border-radius: 0; }
+.accent-blue   { border-left: 3px solid #378ADD; border-radius: 0; }
+.accent-teal   { border-left: 3px solid #1D9E75; border-radius: 0; }
+.accent-amber  { border-left: 3px solid #BA7517; border-radius: 0; }
+.accent-green  { border-left: 3px solid #639922; border-radius: 0; }
+.note { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 12px; color: var(--color-text-secondary); margin-top: 10px; display: flex; gap: 8px; align-items: flex-start; }
+.note i { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+</style>
+<div class="plan">
+
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-badge badge-purple">Fase 1</span>
+      <div>
+        <div class="phase-title">Fondasi Opal</div>
+        <div class="phase-desc">Setup input, agent step, dan dynamic routing</div>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card accent-purple" onclick="sendPrompt('Jelaskan detail komponen input step di Opal prompt builder: apa saja field yang perlu ada dan bagaimana cara kerjanya?')">
+        <div class="card-label" style="color:#534AB7">Input step</div>
+        <div class="card-title">Form input user</div>
+        <ul class="card-items">
+          <li>Kolom tujuan bebas</li>
+          <li>Kolom konteks opsional</li>
+          <li>Dropdown kategori (opsional)</li>
+          <li>Upload referensi (opsional)</li>
+        </ul>
+      </div>
+      <div class="card accent-purple" onclick="sendPrompt('Jelaskan bagaimana cara membuat agent step di Opal sebagai classifier dan router untuk prompt builder ini')">
+        <div class="card-label" style="color:#534AB7">Agent step</div>
+        <div class="card-title">Classifier + router</div>
+        <ul class="card-items">
+          <li>Baca & analisis tujuan user</li>
+          <li>Deteksi kategori otomatis</li>
+          <li>Tanya balik jika ambigu</li>
+          <li>Tentukan cabang tujuan</li>
+        </ul>
+      </div>
+      <div class="card accent-purple" onclick="sendPrompt('Bagaimana cara setup dynamic routing di Opal berdasarkan kategori prompt yang terdeteksi?')">
+        <div class="card-label" style="color:#534AB7">Dynamic routing</div>
+        <div class="card-title">Routing logic</div>
+        <ul class="card-items">
+          <li>Kondisi per kategori</li>
+          <li>Fallback jika tak cocok</li>
+          <li>Path ke sub-agent</li>
+          <li>Log keputusan routing</li>
+        </ul>
+      </div>
+      <div class="card accent-purple" onclick="sendPrompt('Bagaimana cara setup memory di Opal untuk menyimpan preferensi user lintas sesi dalam prompt builder?')">
+        <div class="card-label" style="color:#534AB7">Memory</div>
+        <div class="card-title">Preferensi user</div>
+        <ul class="card-items">
+          <li>Nama / style pilihan</li>
+          <li>Kategori sering dipakai</li>
+          <li>Riwayat prompt dibuat</li>
+          <li>Simpan ke Google Sheets</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-badge badge-blue">Fase 2</span>
+      <div>
+        <div class="phase-title">Cabang-cabang spesifik</div>
+        <div class="phase-desc">Sub-agent per kategori dengan fixed steps masing-masing</div>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card accent-blue" onclick="sendPrompt('Apa saja fixed steps dan parameter yang perlu digali di cabang image/gambar untuk prompt builder di Opal?')">
+        <div class="card-label" style="color:#185FA5">Cabang gambar</div>
+        <div class="card-title">Image prompt</div>
+        <ul class="card-items">
+          <li>Style & medium</li>
+          <li>Subjek & komposisi</li>
+          <li>Mood / lighting</li>
+          <li>Aspect ratio & resolusi</li>
+          <li>Model target (MJ, DALL-E)</li>
+        </ul>
+      </div>
+      <div class="card accent-blue" onclick="sendPrompt('Apa saja fixed steps dan parameter yang perlu digali di cabang video untuk prompt builder di Opal?')">
+        <div class="card-label" style="color:#185FA5">Cabang video</div>
+        <div class="card-title">Video prompt</div>
+        <ul class="card-items">
+          <li>Durasi & format</li>
+          <li>Camera movement</li>
+          <li>Scene & transisi</li>
+          <li>Tone visual</li>
+          <li>Model target (Veo, Sora)</li>
+        </ul>
+      </div>
+      <div class="card accent-blue" onclick="sendPrompt('Apa saja fixed steps dan parameter yang perlu digali di cabang audio untuk prompt builder di Opal?')">
+        <div class="card-label" style="color:#185FA5">Cabang audio</div>
+        <div class="card-title">Audio prompt</div>
+        <ul class="card-items">
+          <li>Genre & tempo</li>
+          <li>Instrumen & vokal</li>
+          <li>Mood & energi</li>
+          <li>Durasi target</li>
+          <li>Model (Suno, Udio)</li>
+        </ul>
+      </div>
+      <div class="card accent-blue" onclick="sendPrompt('Apa saja fixed steps dan parameter yang perlu digali di cabang coding untuk prompt builder di Opal?')">
+        <div class="card-label" style="color:#185FA5">Cabang coding</div>
+        <div class="card-title">Code prompt</div>
+        <ul class="card-items">
+          <li>Bahasa & framework</li>
+          <li>Tujuan fungsi</li>
+          <li>Input / output spec</li>
+          <li>Batasan & constraint</li>
+          <li>Gaya (clean, verbose)</li>
+        </ul>
+      </div>
+      <div class="card accent-blue" onclick="sendPrompt('Apa saja fixed steps dan parameter yang perlu digali di cabang persona/karakter AI untuk prompt builder di Opal?')">
+        <div class="card-label" style="color:#185FA5">Cabang persona</div>
+        <div class="card-title">AI character</div>
+        <ul class="card-items">
+          <li>Nama & latar belakang</li>
+          <li>Kepribadian & nada</li>
+          <li>Keahlian & batasan</li>
+          <li>Cara bicara</li>
+          <li>Konteks penggunaan</li>
+        </ul>
+      </div>
+      <div class="card accent-blue" onclick="sendPrompt('Apa saja fixed steps dan parameter yang perlu digali di cabang konten/script untuk prompt builder di Opal?')">
+        <div class="card-label" style="color:#185FA5">Cabang konten</div>
+        <div class="card-title">Tulisan & narasi</div>
+        <ul class="card-items">
+          <li>Format & panjang</li>
+          <li>Audiens & platform</li>
+          <li>Tone & gaya bahasa</li>
+          <li>Tujuan konten</li>
+          <li>Contoh referensi</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note">
+      <i class="ti ti-plus" aria-hidden="true"></i>
+      <span>Cabang baru bisa ditambah kapan saja — cukup buat path baru di dynamic routing dan sub-agent step sendiri. Contoh berikutnya: pembelajaran, presentasi, iklan, email marketing.</span>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-badge badge-teal">Fase 3</span>
+      <div>
+        <div class="phase-title">Generate & output</div>
+        <div class="phase-desc">Susun, preview, iterasi, dan simpan prompt</div>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card accent-teal" onclick="sendPrompt('Bagaimana cara membuat generate step di Opal yang menyusun prompt final dari semua parameter yang sudah dikumpulkan?')">
+        <div class="card-label" style="color:#0F6E56">Generate step</div>
+        <div class="card-title">Susun prompt final</div>
+        <ul class="card-items">
+          <li>Gabung semua parameter</li>
+          <li>Tambah struktur kategori</li>
+          <li>Format sesuai target model</li>
+          <li>Tambah instruksi kualitas</li>
+        </ul>
+      </div>
+      <div class="card accent-teal" onclick="sendPrompt('Bagaimana cara membuat interactive chat step di Opal untuk preview dan iterasi prompt yang sudah digenerate?')">
+        <div class="card-label" style="color:#0F6E56">Preview & iterasi</div>
+        <div class="card-title">Review & revisi</div>
+        <ul class="card-items">
+          <li>Tampilkan draft prompt</li>
+          <li>User approve atau revisi</li>
+          <li>Perbaiki bagian spesifik</li>
+          <li>Loop sampai puas</li>
+        </ul>
+      </div>
+      <div class="card accent-teal" onclick="sendPrompt('Bagaimana cara setup output step di Opal agar prompt bisa dicopy, disimpan ke Sheets, dan tersimpan di memory?')">
+        <div class="card-label" style="color:#0F6E56">Output & simpan</div>
+        <div class="card-title">Distribusi hasil</div>
+        <ul class="card-items">
+          <li>Prompt siap copy</li>
+          <li>Simpan ke Google Sheets</li>
+          <li>Update memory user</li>
+          <li>Share via link Opal</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-badge badge-amber">Fase 4</span>
+      <div>
+        <div class="phase-title">Polish & skalabilitas</div>
+        <div class="phase-desc">Kualitas, debugging, dan ekspansi mudah</div>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card accent-amber" onclick="sendPrompt('Apa saja yang perlu diperhatikan untuk kualitas output prompt di setiap cabang Opal?')">
+        <div class="card-label" style="color:#854F0B">Kualitas prompt</div>
+        <div class="card-title">Quality control</div>
+        <ul class="card-items">
+          <li>Validasi kelengkapan</li>
+          <li>Cek konsistensi konteks</li>
+          <li>Template per kategori</li>
+          <li>Benchmark output</li>
+        </ul>
+      </div>
+      <div class="card accent-amber" onclick="sendPrompt('Bagaimana cara debug workflow Opal yang bercabang jika ada kesalahan routing atau output yang jelek?')">
+        <div class="card-label" style="color:#854F0B">Debugging</div>
+        <div class="card-title">Monitoring & fix</div>
+        <ul class="card-items">
+          <li>Opal debug mode</li>
+          <li>Log keputusan agent</li>
+          <li>Tes tiap cabang mandiri</li>
+          <li>Iterasi system prompt</li>
+        </ul>
+      </div>
+      <div class="card accent-amber" onclick="sendPrompt('Bagaimana cara merancang Opal prompt builder agar mudah ditambah cabang baru tanpa merusak yang sudah ada?')">
+        <div class="card-label" style="color:#854F0B">Skalabilitas</div>
+        <div class="card-title">Ekspansi cabang</div>
+        <ul class="card-items">
+          <li>Modular per cabang</li>
+          <li>Standar naming step</li>
+          <li>Dokumentasi tiap path</li>
+          <li>Template cabang baru</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+document.querySelectorAll('.card').forEach(c => {
+  c.addEventListener('mouseenter', () => c.style.background = 'var(--color-background-secondary)');
+  c.addEventListener('mouseleave', () => c.style.background = 'var(--color-background-primary)');
+});
+</script>
