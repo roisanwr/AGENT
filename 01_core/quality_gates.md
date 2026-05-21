@@ -17,9 +17,20 @@ Quality gate adalah checkpoint otomatis yang memastikan prompt yang dihasilkan m
 ### Gate 1: Kelengkapan Parameter Wajib ✅
 ```
 CEKLIS:
-□ Semua parameter WAJIB sudah terisi (bukan null/kosong)
-□ Parameter yang kosong sudah diisi dengan default yang sesuai
-□ Default yang digunakan sudah diberitahu ke user
+▢ Semua parameter WAJIB sudah terisi (bukan null/kosong)
+▢ Parameter kosong sudah diisi dengan DEFAULT YANG DITETAPKAN
+  oleh file cabang masing-masing (bukan ditebak oleh LLM saat generate)
+▢ DILARANG: LLM menebak/berhalusinasi nilai default tanpa referensi hardcoded
+▢ Default yang digunakan sudah diberitahu ke user
+
+PRINSIP [FIX Celah #3]:
+- Quality Gate HANYA bertugas MEMVERIFIKASI apakah variabel null atau tidak
+- Quality Gate TIDAK bertanggung jawab mengisi nilai
+- Nilai default sudah harus tersedia di tabel DEFAULT file cabang sebelum sampai ke sini
+- Jika nilai masih null dan tidak ada default di file cabang → tanya user (bukan tebak sendiri)
+
+REFERENSI DEFAULT: Lihat tabel "NILAI DEFAULT WAJIB" di masing-masing file:
+  → 02_branches/image.md, video.md, audio.md, coding.md, persona.md, content.md
 ```
 
 ### Gate 2: Konsistensi Konteks ✅
@@ -180,7 +191,8 @@ VALIDASI FORMAT:
 
 | Kondisi | Tindakan |
 |---------|----------|
-| Parameter wajib kosong | Isi dengan default + beri tahu user |
+| Parameter wajib kosong & ada default di file cabang | Gunakan default dari file cabang + beri tahu user |
+| Parameter wajib kosong & TIDAK ada default | Tanya user — JANGAN menebak sendiri |
 | Parameter kontradiksi | Tanya user mana yang diprioritaskan |
 | Target model undefined | Minta user pilih dari rekomendasi |
 | Prompt terlalu panjang | Potong & prioritaskan elemen terpenting |

@@ -9,7 +9,43 @@
 
 ---
 
-## Kata Kunci Deteksi
+## 🛡️ PRE-KONDISI WAJIB — Baca Sebelum Mulai [FIX Celah #4]
+
+SEBELUM mengajukan pertanyaan apapun ke user, Sub-Agent WAJIB:
+
+1. **Baca variabel berikut dari output Classifier (yang diteruskan dari Discovery):**
+
+   | Variabel | Status | Aksi |
+   |----------|--------|-----------|
+   | `SUBJEK` | ✅ Terisi → Tandai SELESAI, JANGAN tanya ulang | ❌ Kosong → Tanya di Step 1 |
+   | `PLATFORM_TARGET` | ✅ Terisi → Gunakan untuk rekomendasikan model | ❌ Kosong → Tanya saat Model Selector |
+   | `EKSPEKTASI` | ✅ Terisi → Petakan ke `@image_style` dan `@image_mood` | ❌ Kosong → Tanya di Step 2/3 |
+   | `MODEL_PREFERENSI` | ✅ Terisi → Skip model selection | ❌ Kosong → Rekomendasikan saat Model Selector |
+
+2. **DILARANG bertanya ulang variabel yang sudah ✅ SELESAI dari Discovery.**
+
+3. **Hanya tanyakan parameter yang MASIH KOSONG.**
+
+4. **Jika semua parameter sudah terisi dari Discovery**, langsung konfirmasi ringkasan dan proceed ke generate.
+
+---
+
+## 📊 Nilai Default Wajib (Hardcoded) [FIX Celah #3]
+
+> Default ini digunakan ketika parameter tidak dijawab user dan tidak ada dari Discovery.
+> Quality Gate akan membaca tabel ini — BUKAN menebak sendiri.
+
+| Parameter | Default Jika Kosong | Kapan Dipakai |
+|-----------|---------------------|---------------|
+| `@image_style` | `digital illustration` | Jika Step 2 dilewati / tidak dijawab |
+| `@image_mood` | `soft diffused light, neutral` | Jika Step 3 dilewati / tidak dijawab |
+| `@image_ratio` | `1:1` | Jika Step 4 dilewati / tidak dijawab |
+| `@image_details` | *(kosong — tidak perlu default)* | Step 5 opsional, boleh tidak diisi |
+| quality suffix MJ | `--quality 1 --style raw` | Default Midjourney jika tidak ada preferensi |
+| negative prompt SD | `blurry, low quality, watermark, bad anatomy, extra limbs, deformed` | Default SD |
+
+---
+
 
 **Kuat:**
 ```
@@ -34,9 +70,10 @@ midjourney, dall-e, stable diffusion, flux, ideogram, pixel art
 ## Fixed Steps — Parameter yang Digali
 
 ### Step 1 — Subjek Utama
-- **Pertanyaan:** *"Siapa atau apa yang jadi fokus utama gambarmu? Semakin spesifik semakin bagus."*
+- **Cek Discovery dulu:** Jika `SUBJEK` sudah ada dari Discovery → lewati pertanyaan ini, tandai ✅ SELESAI.
+- **Pertanyaan (jika SUBJEK kosong):** *"Siapa atau apa yang jadi fokus utama gambarmu? Semakin spesifik semakin bagus."*
 - **Contoh yang diberikan:** "seorang warrior wanita berambut merah", "naga emas terbang di awan", "kota futuristik malam hari"
-- **Default:** tidak ada — ini parameter WAJIB
+- **Default:** tidak ada — ini parameter WAJIB, tanya sampai ada
 - **Variabel:** `@image_subject`
 
 ### Step 2 — Style & Medium
@@ -164,10 +201,16 @@ midjourney, dall-e, stable diffusion, flux, ideogram, pixel art
 
 Kamu adalah specialist image prompt engineer. Tugasmu: membantu user mendefinisikan semua elemen yang dibutuhkan untuk menghasilkan gambar AI yang luar biasa.
 
+⛔ PRE-KONDISI WAJIB — Jalankan ini SEBELUM bertanya apapun:
+1. Baca variabel dari Classifier: SUBJEK, PLATFORM_TARGET, EKSPEKTASI, MODEL_PREFERENSI
+2. Tandai variabel yang sudah terisi sebagai ✅ SELESAI
+3. JANGAN tanya ulang variabel yang sudah ✅ SELESAI
+4. Mulai dari Step yang parameter-nya masih kosong
+
 Kamu akan menggali 4-5 parameter secara berurutan, satu per satu:
-1. Subjek utama (WAJIB — paling detail mungkin)
-2. Style dan medium visual
-3. Mood dan pencahayaan
+1. Subjek utama (WAJIB — paling detail mungkin) → lewati jika SUBJEK sudah ada dari Discovery
+2. Style dan medium visual → lewati jika ada di EKSPEKTASI
+3. Mood dan pencahayaan → lewati jika ada di EKSPEKTASI
 4. Aspect ratio / komposisi
 5. Detail tambahan (opsional)
 
@@ -175,7 +218,8 @@ ATURAN:
 - Tanya satu parameter per giliran
 - Selalu berikan pilihan contoh untuk memudahkan
 - Subjek adalah yang paling kritis — dorong user untuk spesifik
-- Jika user tidak menjawab step 3-5, gunakan default yang disebutkan
+- Jika user tidak menjawab step 3-5, gunakan DEFAULT dari tabel NILAI DEFAULT WAJIB
+- JANGAN menebak nilai default di luar tabel tersebut
 
 INGAT: Kamu mengumpulkan bahan, bukan generate prompt. Setelah semua terkumpul, serahkan ke generate step.
 

@@ -4,6 +4,41 @@
 
 ---
 
+## 🛡️ PRE-KONDISI WAJIB — Baca Sebelum Mulai [Template Standar]
+
+> **Bagian ini WAJIB ada di setiap cabang.** Salin dan sesuaikan tabel dengan parameter cabang ini.
+
+SEBELUM mengajukan pertanyaan apapun ke user, Sub-Agent WAJIB:
+
+1. **Baca variabel berikut dari output Classifier (yang diteruskan dari Discovery):**
+
+   | Variabel | Status | Aksi |
+   |----------|--------|-----------|
+   | `SUBJEK` | ✅ Terisi → [ISIAN: petakan ke parameter apa] | ❌ Kosong → [ISIAN: tanya di Step berapa] |
+   | `PLATFORM_TARGET` | ✅ Terisi → [ISIAN: gunakan untuk apa] | ❌ Kosong → [ISIAN: tanya kapan] |
+   | `EKSPEKTASI` | ✅ Terisi → [ISIAN: petakan ke variabel apa] | ❌ Kosong → [ISIAN: tanya di Step berapa] |
+   | `MODEL_PREFERENSI` | ✅ Terisi → Skip model selection | ❌ Kosong → Rekomendasikan saat Model Selector |
+
+2. **DILARANG bertanya ulang variabel yang sudah ✅ SELESAI dari Discovery.**
+
+3. **Hanya tanyakan parameter yang MASIH KOSONG.**
+
+---
+
+## 📊 Nilai Default Wajib (Hardcoded) [Template Standar]
+
+> **Bagian ini WAJIB ada di setiap cabang.** Isi nilai default untuk setiap parameter opsional.
+> Quality Gate membaca tabel ini — BUKAN menebak sendiri.
+
+| Parameter | Default Jika Kosong | Kapan Dipakai |
+|-----------|---------------------|---------------|
+| `@[nama_cabang]_[param]` | `[ISIAN: nilai default]` | Jika Step [X] dilewati / tidak dijawab |
+| `@[nama_cabang]_[param]` | `[ISIAN: nilai default]` | Jika Step [X] dilewati / tidak dijawab |
+
+> **Catatan:** Parameter WAJIB (tanpa default) harus diberi catatan: *"TIDAK memiliki default — tanya sampai user menjawab."*
+
+---
+
 ## Identitas Cabang
 
 | Field | Value |
@@ -128,6 +163,12 @@ Kamu adalah specialist untuk membuat prompt [ISIAN: jenis konten] yang berkualit
 
 Tugasmu: Menggali semua parameter yang dibutuhkan untuk generate prompt [ISIAN: jenis] yang optimal untuk model [ISIAN: model target].
 
+⛔ PRE-KONDISI WAJIB — Jalankan ini SEBELUM bertanya apapun:
+1. Baca variabel dari Classifier: SUBJEK, PLATFORM_TARGET, EKSPEKTASI, MODEL_PREFERENSI
+2. Tandai variabel yang sudah terisi sebagai ✅ SELESAI
+3. JANGAN tanya ulang variabel yang sudah ✅ SELESAI
+4. Mulai dari Step yang parameter-nya masih kosong
+
 ## PARAMETER YANG HARUS KAMU GALI
 
 [ISIAN: list parameter + penjelasan mengapa penting]
@@ -136,12 +177,9 @@ Tugasmu: Menggali semua parameter yang dibutuhkan untuk generate prompt [ISIAN: 
 
 - Tanya SATU parameter per giliran
 - Berikan pilihan/contoh untuk setiap pertanyaan
-- Jika user tidak menjawab, gunakan default yang masuk akal
+- Jika user tidak menjawab, gunakan DEFAULT dari tabel NILAI DEFAULT WAJIB
+- JANGAN menebak nilai default di luar tabel tersebut
 - Jangan lanjut ke generate sebelum semua parameter WAJIB terkumpul
-
-## KONTEKS DARI CLASSIFIER
-
-Baca @classifier_output untuk mendapatkan catatan awal dari classifier tentang user ini.
 
 ## FORMAT OUTPUT
 
@@ -159,17 +197,19 @@ SIAP_GENERATE: true
 ## Checklist Sebelum Publish Cabang Baru
 
 ```
-□ Kata kunci deteksi sudah didefinisikan
-□ Ambiguitas dengan cabang lain sudah dipetakan
-□ Semua fixed steps sudah ada (minimal 3 step)
-□ Default untuk setiap parameter sudah ditentukan
-□ Quality checklist sudah dibuat
-□ System prompt sub-agent sudah ditulis
-□ Knowledge model sudah ada di 03_models/
-□ Kondisi routing sudah ditambahkan di Opal Dynamic Router
-□ Entri baru ditambahkan ke 01_core/classifier_rules.md
-□ Entri baru ditambahkan ke 03_models/_index.md
-□ Diuji dengan minimal 5 input berbeda
+▢ Blok PRE-KONDISI WAJIB sudah ada dan terisi
+▢ Tabel NILAI DEFAULT WAJIB sudah ada (semua parameter opsional punya default)
+▢ Parameter tanpa default sudah ditandai "TIDAK memiliki default"
+▢ Kata kunci deteksi sudah didefinisikan
+▢ Ambiguitas dengan cabang lain sudah dipetakan
+▢ Semua fixed steps sudah ada (minimal 3 step)
+▢ Quality checklist sudah dibuat
+▢ System prompt sub-agent sudah ditulis dengan PRE-KONDISI
+▢ Knowledge model sudah ada di 03_models/
+▢ Kondisi routing sudah ditambahkan di Opal Dynamic Router
+▢ Entri baru ditambahkan ke 01_core/classifier_rules.md
+▢ Entri baru ditambahkan ke 03_models/_index.md
+▢ Diuji dengan minimal 5 input berbeda
 ```
 
 ---
