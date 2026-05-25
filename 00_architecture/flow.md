@@ -34,7 +34,7 @@
                     │     AGENT CLASSIFIER          │
                     │  (Opal Agent Step / Gemini)   │
                     │  • Baca data dari Discovery   │
-                    │  • Konfirmasi kategori        │
+                    │  • Silent routing decision    │
                     │  • Output routing signal      │
                     └──────────────┬───────────────┘
                                    │
@@ -124,8 +124,13 @@
 3. **Tujuan/Platform** — Konteks penggunaan ada?
 4. **Ekspektasi Output** — Ada gambaran style/mood?
 
-**Output handoff ke Classifier:**
+**Output handoff ke Classifier (Format Dual-Block):**
 ```
+[CONVERSATION]
+[Pesan penutup singkat ke user]
+[/CONVERSATION]
+
+[SYSTEM_PAYLOAD]
 DISCOVERY_COMPLETE: true
 SUBJEK: [deskripsi]
 KATEGORI_DUGAAN: [gambar/video/audio/coding/persona/konten]
@@ -133,6 +138,7 @@ PLATFORM_TARGET: [platform]
 MODEL_PREFERENSI: [model atau "rekomendasi agent"]
 EKSPEKTASI: [style/mood/requirement]
 MODE_YANG_DIPAKAI: [fast_track/light_discovery/full_discovery]
+[/SYSTEM_PAYLOAD]
 ```
 
 > Lihat system prompt lengkap di [`01_core/discovery_stage.md`](../01_core/discovery_stage.md)
@@ -168,28 +174,23 @@ MODE_YANG_DIPAKAI: [fast_track/light_discovery/full_discovery]
 ### STEP 2 — Agent Classifier
 
 **Platform:** Opal Agent Step (Gemini Flash)  
-**Tujuan:** Memahami intent user dan menentukan routing yang tepat
+**Tujuan:** Memahami intent dari Discovery dan merutekan secara *silent* (Silent Router)
 
 **System Prompt Classifier:**
 > Lihat detail di [`01_core/classifier_rules.md`](../01_core/classifier_rules.md)
 
 **Logika kerja:**
-1. Baca input user + riwayat preferensi dari memory
-2. Analisis kata kunci dan intent
-3. Tentukan kategori: `gambar | video | audio | coding | persona | konten | ambigu`
-4. Jika `ambigu`: tanya satu pertanyaan klarifikasi
-5. Jika kategori jelas: langsung routing
-
-**Contoh klarifikasi yang tepat:**
-```
-User: "buatkan konten tentang teknologi"
-Agent: "Konten ini untuk platform apa — tulisan/artikel, script video, atau caption media sosial?"
-```
+1. Baca payload `[SYSTEM_PAYLOAD]` dari Discovery Stage + riwayat memory
+2. Analisis `KATEGORI_DUGAAN` dan konteks pendukung
+3. Tentukan kategori final: `gambar | video | audio | coding | persona | konten | fallback`
+4. Hasilkan output murni berupa routing signal (`KATEGORI: ...`)
+5. **SELESAI** — tidak ada iterasi chat.
 
 **Yang TIDAK boleh dilakukan classifier:**
-- Mengasumsikan kategori jika ada ambiguitas
-- Mengajukan lebih dari satu pertanyaan sekaligus
-- Langsung generate prompt tanpa routing ke sub-agent
+- ⛔ Mengeluarkan output pesan chat ke user (DILARANG KERAS)
+- ⛔ Bertanya klarifikasi (ini tugas eksklusif Discovery)
+- ⛔ Mengasumsikan kategori tanpa dasar kuat (gunakan `fallback` jika ragu)
+- ⛔ Langsung generate prompt tanpa routing ke sub-agent
 
 ---
 

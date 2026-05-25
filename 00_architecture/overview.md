@@ -62,18 +62,17 @@ Titik masuk tunggal untuk semua permintaan. User tidak perlu pilih kategori seca
 - Target model jika sudah tahu (opsional)
 
 ### 2. Agent Classifier (Opal Agent Step)
-Ini adalah "otak" sistem. Powered by Gemini Flash, bertugas:
+Ini adalah "otak" routing sistem. Powered by Gemini Flash, bertugas sebagai **Silent Router**:
 
-- **Menganalisis** maksud dari input user
-- **Mengklasifikasi** ke salah satu kategori yang tersedia
-- **Klarifikasi** jika input ambigu (tanya balik ke user)
+- **Menganalisis** payload dari Discovery Stage
+- **Mengklasifikasi** ke salah satu kategori yang tersedia secara *silent* (tanpa chat ke user)
 - **Membaca memory** preferensi user dari sesi sebelumnya
 - **Merutekan** ke cabang yang tepat via dynamic routing
 
 ### 3. Dynamic Router
 Mengeksekusi keputusan routing dari classifier. Memiliki kondisi untuk setiap cabang dan satu fallback "lainnya" untuk kategori baru yang belum ada.
 
-> **Aturan emas routing:** Jika ragu antara dua cabang, tanya user. Jangan routing berdasarkan asumsi.
+> **Aturan emas routing:** Classifier adalah Silent Router. Jika ragu atau input tidak memenuhi satupun kondisi cabang, lempar ke cabang `fallback` untuk diurus kembali oleh sistem klarifikasi, jangan berasumsi sendiri.
 
 ### 4. Sub-Agent per Cabang (Fixed Steps)
 Setiap cabang adalah unit yang independen dengan fixed steps sendiri. Mereka bertanggung jawab untuk:

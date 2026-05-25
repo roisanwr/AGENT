@@ -165,9 +165,13 @@ Node ini membaca hasil Discovery dan mengeluarkan keputusan kategori + sinyal ro
    **D. Format Output yang Harus Dihasilkan Classifier:**
    Pastikan di dalam instruksi, Classifier diperintahkan menghasilkan output dalam format ini:
    ```
-   KEPUTUSAN: [gambar/video/audio/coding/persona/konten]
-   ALASAN: [satu kalimat]
-   CATATAN: [info untuk sub-agent cabang]
+   KATEGORI: [gambar/video/audio/coding/persona/konten/fallback]
+   CONFIDENCE: [tinggi/sedang/rendah]
+   SUBJEK: [dari Discovery]
+   PLATFORM_TARGET: [dari Discovery]
+   MODEL_PREFERENSI: [dari Discovery]
+   EKSPEKTASI: [dari Discovery]
+   CATATAN_UNTUK_SUB_AGENT: [info tambahan]
    ```
 
 ---
@@ -184,13 +188,13 @@ Dari `Gen_Classifier`, tarik **6 panah berbeda** ke 6 node Generate yang berbeda
 
 | Panah ke | Kondisi yang Ditulis |
 |----------|---------------------|
-| `Gen_SubAgent_Gambar` | `Output mengandung "KEPUTUSAN: gambar"` |
-| `Gen_SubAgent_Video` | `Output mengandung "KEPUTUSAN: video"` |
-| `Gen_SubAgent_Audio` | `Output mengandung "KEPUTUSAN: audio"` |
-| `Gen_SubAgent_Coding` | `Output mengandung "KEPUTUSAN: coding"` |
-| `Gen_SubAgent_Persona` | `Output mengandung "KEPUTUSAN: persona"` |
-| `Gen_SubAgent_Konten` | `Output mengandung "KEPUTUSAN: konten"` |
-| `Gen_Discovery` *(loop fallback)* | `Tidak ada kondisi di atas yang terpenuhi` |
+| `Gen_SubAgent_Gambar` | `Output mengandung "KATEGORI: gambar"` |
+| `Gen_SubAgent_Video` | `Output mengandung "KATEGORI: video"` |
+| `Gen_SubAgent_Audio` | `Output mengandung "KATEGORI: audio"` |
+| `Gen_SubAgent_Coding` | `Output mengandung "KATEGORI: coding"` |
+| `Gen_SubAgent_Persona` | `Output mengandung "KATEGORI: persona"` |
+| `Gen_SubAgent_Konten` | `Output mengandung "KATEGORI: konten"` |
+| `Gen_Discovery` *(loop fallback)* | `Output mengandung "KATEGORI: fallback"` atau tidak memenuhi syarat lain |
 
 > **Catatan Fallback:** Kondisi terakhir (loop balik ke Discovery) memastikan jika Classifier menghasilkan output yang tidak dikenali, user diminta klarifikasi ulang — bukan error.
 
@@ -248,7 +252,7 @@ Sebelum sub-agent setiap cabang dibuat, pasang dulu node Output sementara agar b
 │  → Load: @classifier_rules              │
 │  → Baca: @Gen_Discovery                 │
 │  → Baca: @tools.memory                  │
-│  → Output: KEPUTUSAN: [kategori]        │
+│  → Output: KATEGORI: [kategori]         │
 └──┬──────┬──────┬──────┬──────┬──────┬──┘
    │      │      │      │      │      │
    ▼      ▼      ▼      ▼      ▼      ▼
@@ -270,7 +274,7 @@ Jalankan mode **Preview** di Opal dan uji 3 skenario berikut sebelum membangun c
 **Ekspektasi:**
 - ✅ Yui tidak bertanya apapun
 - ✅ Langsung memuji inputnya (*"Wah, super spesifik!"*)
-- ✅ `Gen_Classifier` menghasilkan `KEPUTUSAN: gambar`
+- ✅ `Gen_Classifier` menghasilkan `KATEGORI: gambar`
 - ✅ Panah menuju `Gen_SubAgent_Gambar` aktif
 
 ### Test 2: Full Discovery

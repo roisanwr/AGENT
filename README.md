@@ -92,9 +92,11 @@ AGENT/
 ```
 User Input
     ↓
-Agent Classifier (Opal Agent Step)
+Discovery Stage (Interactive Chat)
     ↓
-Dynamic Router → [Gambar | Video | Audio | Coding | Persona | Konten | ...]
+Agent Classifier (Silent Router)
+    ↓
+Dynamic Router → [Gambar | Video | Audio | Coding | Persona | Konten | Fallback]
     ↓
 Sub-Agent per Cabang (Fixed Steps)
     ↓
